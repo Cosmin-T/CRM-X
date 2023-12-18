@@ -3,7 +3,24 @@
 <div class="col-md-6 offset-md-3">
 
 {% if user.is_authenticated %}
-<h1>Welcome World</h1>
+<h1>Records</h1>
+
+{% if records %}
+    {% for record in records %}
+        {{ record.id }}
+        {{ record.created_at }}
+        {{ record.first_name }}
+        {{ record.last_name }}
+        {{ record.adress  }}
+        {{ record.email }}
+        {{ record.phone }}
+        {{ record.city }}
+        {{ record.state }}
+        {{ record.zip_code }}
+        {{ record.description }}
+        <br />
+    {% endfor %}
+{% endif %}
 
 {% else %}
 <h1>Login</h1>
