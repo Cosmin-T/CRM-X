@@ -1,45 +1,124 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="col-md-6 offset-md-3">
 
 {% if user.is_authenticated %}
-<h1>Records</h1>
 
-{% if records %}
-    {% for record in records %}
-        {{ record.id }}
-        {{ record.created_at }}
-        {{ record.first_name }}
-        {{ record.last_name }}
-        {{ record.adress  }}
-        {{ record.email }}
-        {{ record.phone }}
-        {{ record.city }}
-        {{ record.state }}
-        {{ record.zip_code }}
-        {{ record.description }}
-        <br />
-    {% endfor %}
-{% endif %}
+<style>
+    .table-custom {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 1em;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .table-custom thead {
+        background-color: #343a40;
+        color: #ffffff;
+    }
+
+    .table-custom th,
+    .table-custom td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #dee2e6;
+        position: relative;
+    }
+
+    .table-custom td:hover::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(133, 133, 133, 0.55);
+        z-index: -1;
+        border-radius: 10px;
+        transform: scale(1.05);
+    }
+
+    .centered-title {
+        text-align: center;
+        margin: 20px 0;
+    }
+</style>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<div class="centered-title">
+    <h1 style="font-size: 2em; background-color: #343a40; color: white; padding: 10px 20px; border-radius: 10px; display: inline-block; font-family: 'Arial', sans-serif; letter-spacing: 1px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">Records</h1>
+</div>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+
+<table class="table-custom">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Added Date</th>
+            <th scope="col">Name</th>
+            <th scope="col">Subject</th>
+            <th scope="col">Email</th>
+            <th scope="col">Status #</th>
+            <th scope="col">Resolution</th>
+            <th scope="col">Description</th>
+            <th scope="col">Comment</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if records %}
+            {% for record in records %}
+                <tr>
+                    <td><a href="{% url 'record' record.id %}">{{ record.id }}</a></td>
+                    <td>{{ record.created_at }}</td>
+                    <td>{{ record.first_name }} {{ record.last_name }}</td>
+                    <td>{{ record.subject }}</td>
+                    <td>{{ record.email }}</td>
+                    <td>{{ record.status }}</td>
+                    <td>{{ record.resolution }}</td>
+                    <td>{{ record.description }}</td>
+                    <td>{{ record.comment }}</td>
+                    <td class="button-column">
+                        <a href="{% url 'update' record.id %}" class="btn btn-secondary">Update</a>
+                        <a href="{% url 'delete' record.id %}" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+    </tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+        $('.table-custom td').hover(
+            function () {
+                $(this).addClass('hovered');
+            },
+            function () {
+                $(this).removeClass('hovered');
+            }
+        );
+    });
+</script>
 
 {% else %}
-<h1>Login</h1>
-<br />
-<br />
-<form method="post" action="{% url 'home' %}">
-    {% csrf_token %}
-    <div class="mb-3">
-        <input type="text" class="form-control" name="username", placeholder="User" required>
-    </div>
-    <div class="mb-3">
-        <input type="password" class="form-control" name="password", placeholder="Password" required>
+    <div class="centered-title">
+        <h1 style="font-size: 2em; background-color: #343a40; color: white; padding: 10px 20px; border-radius: 10px; display: inline-block; font-family: 'Arial', sans-serif; letter-spacing: 1px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">Login</h1>
     </div>
     <br />
-    <button type="submit" class="btn btn-secondary">Login</button>
+    <br />
+    <form method="post" action="{% url 'home' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <input type="text" class="form-control" name="username" placeholder="User" required>
+        </div>
+        <div class="mb-3">
+            <input type="password" class="form-control" name="password" placeholder="Password" required>
+        </div>
+        <br />
+        <button type="submit" class="btn btn-secondary">Login</button>
     </form>
-</form>
-</div>
-
 {% endif %}
-
 {% endblock %}

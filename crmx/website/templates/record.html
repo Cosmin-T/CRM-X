@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .card-custom {
+        width: 100%;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .card-custom .card-header {
+        background-color: #343a40;
+        color: #ffffff;
+        font-weight: bold;
+        width: 50%;
+        background-size: 100% auto;
+        text-align: center;
+    }
+
+    .card-custom .card-body {
+        padding: 20px;
+    }
+
+    .card-custom .btn {
+        margin-right: 10px;
+    }
+</style>
+
+<div class="container">
+    <div class="col-md-6 offset-md-3 mt-4">
+
+        <div class="card card-custom">
+            <div class="card-header">
+                {{ customer_record.first_name }} {{ customer_record.last_name }}
+            </div>
+            <div class="card-body">
+                <p class="card-text">
+                    <strong>ID: </strong>{{ customer_record.id }} <br />
+                    <strong>Created Date: </strong>{{ customer_record.created_at }} <br />
+                    <strong>Subject: </strong>{{ customer_record.subject }} <br />
+                    <strong>Email: </strong>{{ customer_record.email }} <br />
+                    <strong>Status: </strong>{{ customer_record.status }} <br />
+                    <strong>resolution: </strong>{{ customer_record.resolution }} <br />
+                </p>
+                <h5 class="card-title">{{ customer_record.description }}</h5>
+                <h5 class="card-title">{{ customer_record.comment }}</h5>
+                <br /><br /><br />
+                <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
+                <a href="{% url 'update' customer_record.id %}" class="btn btn-secondary">Update Record</a>
+                <a href="{% url 'delete' customer_record.id %}" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

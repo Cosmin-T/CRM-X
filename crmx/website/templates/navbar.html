@@ -1,6 +1,53 @@
+<style>
+  /* Navbar Styling */
+  .navbar {
+      background-color: #343a40; /* Dark background for the navbar */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  }
+
+  .navbar-brand {
+      font-size: 1.5em; /* Larger size for brand name */
+      color: #f8f9fa !important; /* Ensure the brand name stands out */
+      font-weight: bold; /* Make the brand name bold */
+  }
+
+  .navbar-toggler {
+      border-color: rgba(255, 255, 255, 0.1); /* Light border for the toggler */
+  }
+
+  .navbar-toggler-icon {
+      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+      /* Custom SVG toggle icon with lighter stroke for contrast */
+  }
+
+  .nav-link {
+      color: #f8f9fa !important; /* Light color for links for readability */
+      margin-right: 10px; /* Space between nav items */
+      transition: color 0.2s; /* Smooth transition for hover effect */
+  }
+
+  .nav-link:hover,
+  .nav-link:focus {
+      color: #cbd3da !important; /* Slightly darker color on hover/focus */
+      text-decoration: none; /* Remove underline on hover/focus */
+  }
+
+  /* Responsive Styling */
+  @media (max-width: 992px) {
+      .navbar-collapse {
+          background-color: #343a40; /* Maintain the dark background on collapse */
+      }
+
+      .nav-item {
+          border-top: 1px solid #495057; /* Divider between items in collapsed state */
+      }
+  }
+</style>
+
+
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="{%url 'home'%}">CRM-X</a>
+      <a class="navbar-brand" href="{%url 'home'%}">Ticket-X</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -8,6 +55,9 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
           {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'add'%}">Add Record</a>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'logout'%}">Logout</a>
           </li>

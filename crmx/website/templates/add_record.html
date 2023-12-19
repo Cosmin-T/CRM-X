@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    /* General Styling */
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        line-height: 1.6;
+    }
+
+    /* Centered Title */
+    .centered-title h1 {
+        background-color: #343a40;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-family: 'Arial', sans-serif;
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        display: inline-block;
+        letter-spacing: 1px;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        font-size: 2em;
+    }
+
+    /* Form Styling */
+    form {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        margin-top: 20px; /* Adjusts space above the form */
+    }
+
+    /* Buttons */
+    .btn {
+        background-color: #343a40;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+        background-color: #282c34;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .col-md-6.offset-md-3 {
+            flex-direction: column;
+            width: 90%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+    }
+
+    /* Label Styling */
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #343a40;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea,
+    select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px; /* Space between the fields */
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box; /* Include padding and border in the element's width and height */
+    }
+
+    input[type="radio"],
+    input[type="checkbox"] {
+        margin-right: 10px;
+    }
+
+    /* Focus state for input fields to enhance accessibility */
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    textarea:focus,
+    select:focus {
+        border-color: #343a40;
+        outline: none; /* Removes the default focus outline */
+        box-shadow: 0 0 5px rgba(52, 58, 64, 0.25); /* Adds a subtle glow to the focused field */
+    }
+
+    /* Style for inline radio buttons and checkboxes */
+    .status-label,
+    .resolution-label {
+        margin-right: 15px;
+        font-weight: normal;
+    }
+
+    /* Adjusting the space around form sections */
+    .form-section {
+        margin-bottom: 20px;
+    }
+
+    /* Submit button additional styling for better UX */
+    .btn-submit {
+        width: 100%; /* Full-width button */
+        padding: 15px; /* Bigger padding for a larger clickable area */
+        font-size: 1.1em; /* Slightly larger font size */
+    }
+</style>
+
+<div class="col-md-6 offset-md-3">
+    <div class="centered-title">
+        <h1 style="font-size: 2em; background-color: #343a40; color: white; padding: 10px 20px; border-radius: 10px; display: inline-block; font-family: 'Arial', sans-serif; letter-spacing: 1px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">Add Record</h1>
+    </div>
+    <br/><br/><br/><br/><br/>
+<br/>
+
+<form method="POST" action="{% url 'add' %}">
+	{% csrf_token %}
+
+	{{ form.as_p }}
+
+<br/>
+  <button type="submit" class="btn btn-secondary">Add Record</button>
+   <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
+
+</form>
+
+</div>
+
+{% endblock %}

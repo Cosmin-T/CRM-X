@@ -1,9 +1,105 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<style>
+	/* Centered Title Styling */
+	.centered-title h1 {
+		font-size: 2em;
+		background-color: #343a40;
+		color: white;
+		padding: 10px 20px;
+		border-radius: 10px;
+		display: inline-block;
+		font-family: 'Arial', sans-serif;
+		letter-spacing: 1px;
+		text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+		margin-bottom: 1em; /* Replace <br> tags with margin for spacing */
+	}
+
+	/* Form Styling */
+	form {
+		background: white;
+		padding: 20px;
+		border-radius: 10px;
+		box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+	}
+
+	/* Form Field Styling */
+	.form-control {
+		width: 100%;
+		padding: 15px;
+		margin-bottom: 15px; /* Space between form fields */
+		border: 1px solid #ccc;
+		border-radius: 5px;
+		box-sizing: border-box;
+	}
+
+	/* Button Styling */
+	.btn {
+		background-color: #343a40;
+		color: white;
+		border: none;
+		padding: 10px 20px;
+		border-radius: 5px;
+		cursor: pointer;
+		transition: background-color 0.3s;
+		display: block;
+		width: 100%; /* Make the button full-width */
+		font-size: 1em;
+	}
+
+	.btn-secondary:hover {
+		background-color: #282c34;
+	}
+
+	/* Error Message Styling */
+	.alert {
+		color: #856404;
+		background-color: #fff3cd;
+		border-color: #ffeeba;
+		position: relative;
+		padding: .75rem 1.25rem;
+		margin-bottom: 1rem;
+		border: 1px solid transparent;
+		border-radius: .25rem;
+	}
+
+	/* Alert Close Button Styling */
+	.btn-close {
+		float: right;
+		font-size: 1.5rem;
+		line-height: 1;
+		color: #000;
+		text-shadow: none;
+		opacity: 0.5;
+	}
+
+	.btn-close:hover {
+		color: #000;
+		text-decoration: none;
+		opacity: 0.75;
+	}
+
+	/* Remove <br> tags and use CSS for spacing */
+	form > br {
+		display: none;
+	}
+
+	/* Responsive Design */
+	@media (max-width: 768px) {
+		.col-md-6.offset-md-3 {
+			flex-direction: column;
+			width: 90%;
+			max-width: 600px;
+			margin: 0 auto;
+		}
+	}
+</style>
 
 <div class="col-md-6 offset-md-3">
-<h1>Register</h1>
+	<div class="centered-title">
+        <h1 style="font-size: 2em; background-color: #343a40; color: white; padding: 10px 20px; border-radius: 10px; display: inline-block; font-family: 'Arial', sans-serif; letter-spacing: 1px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">Register</h1>
+    </div>
 <br/>
 
 <form method="POST" action="">
@@ -19,15 +115,9 @@
 			  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 			</div>
 		{% endif %}
-
 	{{ form.as_p }}
-
 	<br/>
 	  <button type="submit" class="btn btn-secondary">Register</button>
 	</form>
-
-
-
 </div>
-
 {% endblock %}
