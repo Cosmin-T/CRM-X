@@ -22,6 +22,7 @@
 
 ### Running the server
 
+* Cd to where manage.py is.
 * Start the Django development server using `python manage.py runserver`.
 
 ## Configuration
