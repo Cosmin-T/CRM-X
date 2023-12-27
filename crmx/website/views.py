@@ -71,17 +71,17 @@ def delete_record(request, pk):
         return redirect ('home')
 
 def add_record(request):
-	form = AddRecordForm(request.POST or None)
-	if request.user.is_authenticated:
-		if request.method == "POST":
-			if form.is_valid():
-				add_record = form.save()
-				messages.success(request, "Record Added...")
-				return redirect('home')
-		return render(request, 'add_record.html', {'form':form})
-	else:
-		messages.success(request, "Not authenticated! Please login.")
-		return redirect('home')
+    if request.user.is_authenticated:
+        form = AddRecordForm(request.POST or None)
+        if request.method == "POST":
+            if form.is_valid():
+                add_record =form.save()
+                messages.success(request, "Record Added Successfully")
+                form = AddRecordForm()
+        return render(request, 'add_record.html', {'form': form})
+    else:
+        messages.error(request, "Not authenticated! Please login.")
+        return redirect('home')
 
 def update_record(request, pk):
     if request.user.is_authenticated:
