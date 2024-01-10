@@ -3,16 +3,17 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import SignUpForm, AddRecordForm
 from .models import Record
+from django.http import HttpResponse
+from django.views.decorators.http import require_POST
+import csv
 
 def home(request):
     records = Record.objects.all()
 
-    # Check login
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
 
-        # Authenthicate
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
@@ -37,7 +38,6 @@ def register_user(request):
         if form.is_valid():
             form.save()
 
-            # Authenticate and login
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
             user = authenticate(username=username, password=password)
@@ -53,7 +53,6 @@ def register_user(request):
 
 def customer_record(request, pk):
     if request.user.is_authenticated:
-        # look up records
         customer_record = Record.objects.get(id=pk)
         return render(request, 'record.html', {'customer_record':customer_record})
     else:
@@ -95,3 +94,22 @@ def update_record(request, pk):
     else:
         messages.success(request, "Not authenticated! Please login.")
         return redirect('home')
+
+def download_table(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="table.csv"'
+
+    writer = csv.writer(response)
+    records = Record.objects.all()
+    writer.writerow(['ID', 'Added Date', 'Name', 'Subject', 'Email', 'Status', 'Resolution', 'Description', 'Comment'])
+    for record in records:
+        writer.writerow([record.id, record.created_at, f'{record.first_name} {record.last_name}', record.subject, record.email, record.status, record.resolution, record.description, record.comment])
+
+    return response
+
+def delete_all_records(request):
+    if request.method == 'POST':
+        records = Record.objects.all()
+        records.delete()
+        messages.success(request, "All records deleted successfully!")
+        return redirect ('home')
