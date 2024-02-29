@@ -71,12 +71,16 @@ def delete_record(request, pk):
 
 def add_record(request):
     if request.user.is_authenticated:
-        form = AddRecordForm(request.POST or None)
         if request.method == "POST":
+            form = AddRecordForm(request.POST)
             if form.is_valid():
-                add_record =form.save()
+                add_record = form.save()
                 messages.success(request, "Record Added Successfully")
-                form = AddRecordForm()
+            else:
+                messages.error(request, "Invalid form data. Please check the fields.")
+        else:
+            form = AddRecordForm(initial={'first_name': request.user.first_name, 'last_name': request.user.last_name, 'email': request.user.email})
+
         return render(request, 'add_record.html', {'form': form})
     else:
         messages.error(request, "Not authenticated! Please login.")

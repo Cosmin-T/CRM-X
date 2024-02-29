@@ -4,26 +4,74 @@
 {% if user.is_authenticated %}
 
 <style>
-    .table-custom {
-        width: 100%;
+    .container {
+        position: relative;
+    }
+    table {
         border-collapse: collapse;
+        outline: none;
+        table-layout: fixed;
+        width: 100%;
         margin-bottom: 1em;
-        overflow: hidden;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        border-radius: 10px;
-        overflow: hidden;
+    }
+    table tr td,
+    table tr th {
+        word-wrap: break-word;
+        border: none; /* Remove borders */
+        padding: 5px;
+        position: relative;
+        text-align: left;
+        box-sizing: border-box;
+    }
+    .y_resize {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 7px;
+        height: 102%;
+        background: transparent;
+        cursor: col-resize;
+        transition: background-color 0.2s; /* Smooth transition for background color */
+    }
+    .y_resize:hover {
+        background-color: #FFFFFF; /* White hover effect */
+    }
+    .centered-title {
+        text-align: center;
+        margin: 20px 0;
     }
 
-    .table-custom thead {
+    table thead {
         background-color: #343a40;
         color: #ffffff;
+    }
+    table thead tr th:first-child {
+        border-top-left-radius: 10px; /* Rounded top-left corner for the first header */
+    }
+    table thead tr th:last-child {
+        border-top-right-radius: 10px; /* Rounded top-right corner for the last header */
+    }
+
+    .buttons-container {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-bottom: 0px;
+    }
+
+    .btn-secondary {
+        margin-right: 0px;
+    }
+    .btn-danger.special-btn {
+        margin-left: 1039px; /* Adjust the margin as needed */
     }
 
     .table-custom th,
     .table-custom td {
         padding: 12px;
         text-align: left;
-        border-bottom: 1px solid #dee2e6;
+        border-bottom: 1px solid #343a40;
         position: relative;
     }
 
@@ -40,19 +88,18 @@
         transform: scale(1.05);
     }
 
-    .centered-title {
-        text-align: center;
-        margin: 20px 0;
+    .noselect {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
     }
-    .buttons-container {
-        display: flex;
-        justify-content: flex-end; /* Aligns items to the right */
-        align-items: center; /* Centers items vertically */
-        margin-bottom: 0px; /* Space below the buttons */
+    @media screen and (min-width: 768px) {
+    #table_resize {
+        table-layout: auto;
     }
-    .btn-secondary {
-    margin-right: 10px; /* Add space to the right of buttons */
     }
+
 </style>
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
@@ -62,32 +109,33 @@
 <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 
 <div class="buttons-container">
-    <a href="{% url 'download_table' %}" class="btn btn-secondary">Download Table</a>
+    <a href="{% url 'download_table' %}" class="btn btn-secondary special-btn">Download Table</a>
     <form action="{% url 'delete_all_records' %}" method="post">
         {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Delete Table</button>
+        <button type="submit" class="btn btn-danger special-btn">Delete Table</button>
     </form>
 </div>
 
-<br/>
-<br/>
 
-<table class="table-custom">
-    <thead>
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Added Date</th>
-            <th scope="col">Name</th>
-            <th scope="col">Subject</th>
-            <th scope="col">Email</th>
-            <th scope="col">Status #</th>
-            <th scope="col">Resolution</th>
-            <th scope="col">Description</th>
-            <th scope="col">Comment</th>
-            <th scope="col">Actions</th>
-        </tr>
-    </thead>
-    <tbody>
+<br/>
+<br/>
+<div class="container" id="container">
+    <table border="0" cellpadding = "0" cellspacing="0" id="table_resize" contenteditable="false" class="table-custom" >
+        <thead>
+            <tr>
+                <th scope="col"><div>ID</div></th>
+                <th scope="col"><div>Added Date</div></th>
+                <th scope="col"><div>Name</div></th>
+                <th scope="col"><div>Subject</div></th>
+                <th scope="col"><div>Email</div></th>
+                <th scope="col"><div>Status</div></th>
+                <th scope="col"><div>Resolution</div></th>
+                <th scope="col"><div>Description</div></th>
+                <th scope="col"><div>Comment</div></th>
+                <th scope="col"><div>Actions</div></th>
+            </tr>
+        </thead>
+
         {% if records %}
             {% for record in records %}
                 <tr>
@@ -101,27 +149,89 @@
                     <td>{{ record.description }}</td>
                     <td>{{ record.comment }}</td>
                     <td class="button-column">
-                        <a href="{% url 'update' record.id %}" class="btn btn-secondary">Update</a>
-                        <a href="{% url 'delete' record.id %}" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+                        <div style="margin-bottom: 30px;">
+                            <a href="{% url 'update' record.id %}" class="btn btn-secondary">Update</a>
+                        </div>
+                        <div>
+                            <a href="{% url 'delete' record.id %}" class="btn btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+                        </div>
                     </td>
                 </tr>
             {% endfor %}
         {% endif %}
-    </tbody>
-</table>
+
+    </table>
+</div>
 
 <script>
-    $(document).ready(function () {
-        $('.table-custom td').hover(
-            function () {
-                $(this).addClass('hovered');
-            },
-            function () {
-                $(this).removeClass('hovered');
+    window.onload = function() {
+       (function(){
+        var col_element, next_element, cursorStart = 0, dragStart = false, width, next_width = undefined, table_wt;
+        var container = document.getElementById("container"),
+            table = document.getElementById("table_resize"),
+            table_th = table.getElementsByTagName("th");
+
+        function mouseDown(e){
+          var resizer = e.target;
+          var col_index = parseInt(resizer.getAttribute("data-resizecol")) - 1;
+          col_element = table_th[col_index];
+          next_element = table_th[col_index + 1];
+          dragStart = true;
+          cursorStart = e.pageX;
+          width = col_element.offsetWidth;
+          table_wt = table.offsetWidth;
+          if (next_element != undefined) {
+            next_width = next_element.offsetWidth;
+          }
+          e.preventDefault(); // Prevent text selection
+        }
+
+        function mouseMove(e){
+          if(dragStart){
+            var cursorPosition = e.pageX;
+            var mouseMoved = cursorPosition - cursorStart;
+            var newWidth = width + mouseMoved;
+            if(newWidth > 30 && (!next_element || next_width - mouseMoved > 30)){
+              col_element.style.width = newWidth + 'px';
+              if (next_element) {
+                next_element.style.width = (next_width - mouseMoved) + 'px';
+              }
             }
-        );
-    });
-</script>
+          }
+        }
+
+        function mouseUp(){
+          dragStart = false;
+        }
+
+        function createResizeDiv(){
+            var th_length = table_th.length;
+            for(var i = 0; i < th_length; i++){
+                var resizer = document.createElement("div");
+                resizer.className = "y_resize";
+                resizer.style.position = "absolute";
+                resizer.style.top = 0;
+                resizer.style.right = "0px";
+                resizer.style.width = "7px";
+                resizer.style.height = "100%";
+                resizer.style.background = "transparent";
+                resizer.style.cursor = "col-resize";
+                resizer.setAttribute("data-resizecol", i);
+
+                table_th[i].appendChild(resizer);
+                table_th[i].style.position = "relative";
+
+                resizer.addEventListener("mousedown", mouseDown);
+            }
+            }
+
+        document.body.addEventListener("mousemove", mouseMove);
+        document.body.addEventListener("mouseup", mouseUp);
+        createResizeDiv();
+      })();
+    }
+    </script>
+
 
 {% else %}
     <div class="centered-title">

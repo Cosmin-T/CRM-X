@@ -1,6 +1,15 @@
 from pathlib import Path
 from crmx.config_ini import *
+from dotenv import load_dotenv, get_key
+import os
 
+
+
+dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+
+load_dotenv(dotenv_path)
+
+PASS = get_key(dotenv_path, 'PASSWORD')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -15,7 +24,13 @@ SECRET_KEY = 'django-insecure-9@myy_)#t)s2h0yz&=x2r=zrxu&7ophz07x4fr8u9!)(q(ms-y
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'your-domain.com',
+    '5b97-2a02-2f05-690a-4a00-ed2f-ae59-ffb7-a690.ngrok-free.app',
+]
+
 
 
 # Application definition
@@ -70,7 +85,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'crmxdb',
         'USER': 'root',
-        'PASSWORD': config['DEFAULT']['PASSWORD'],
+        'PASSWORD': PASS,
         'HOST': 'localhost',
         'PORT': '3306'
     }

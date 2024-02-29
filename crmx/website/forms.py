@@ -33,7 +33,7 @@ class SignUpForm(UserCreationForm):
 class AddRecordForm(forms.ModelForm):
     STATUS_CHOICES = [
         ('open', 'Open'),
-        ('in_progress', 'In Progress'),
+        ('in progress', 'In Progress'),
         ('closed', 'Closed'),
         ('rejected', 'Rejected'),
         ('solved', 'Solved'),
@@ -48,14 +48,14 @@ class AddRecordForm(forms.ModelForm):
     ]
     first_name = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"..", "class":"form-control"}), label="First Name")
     last_name = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"..", "class":"form-control"}), label="Last Name")
+    email = forms.EmailField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"..", "class":"form-control"}), label="Email Address")
     subject = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"..", "class":"form-control"}), label="Subject")
-    email = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"..", "class":"form-control"}), label="Email Address")
     status = forms.ChoiceField(choices=STATUS_CHOICES, widget=forms.widgets.Select(attrs={"class":"form-control"}))
     resolution = forms.ChoiceField(choices=RESOLUTION_CHOICES, widget=forms.widgets.Select(attrs={"class":"form-control"}))
     description = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"..", "class":"form-control"}), label="Description")
     comment = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"..", "class":"form-control"}), label="Comment")
 
-
     class Meta:
        model = Record
        exclude = ('user', 'any_other_field_not_needed')
+
